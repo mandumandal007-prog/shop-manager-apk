@@ -1,0 +1,24 @@
+name: Publish APKs
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download APKs
+        run: |
+          curl -fL -o Shop.apk https://mandu-apk-drop.sites.tab.bot/Shop.apk
+          curl -fL -o Manager.apk https://mandu-apk-drop.sites.tab.bot/Manager.apk
+          sha256sum Shop.apk Manager.apk
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.0
+          name: Shop + Manager v1.0.0
+          files: |
+            Shop.apk
+            Manager.apk
